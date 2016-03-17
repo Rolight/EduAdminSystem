@@ -1,5 +1,5 @@
-# encoding = utf-8
-# 此文件包含了各种环境的配置
+# -*- coding: utf-8 -*-
+#coding=utf-8
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -14,7 +14,6 @@ class Config:
     @staticmethod
     def init_app(app):
         pass
-# 开发环境配置
 class DevelopmentConfig(Config):
     DEBUG = True
     MAIL_SERVER = 'smtp.google.com'
@@ -25,13 +24,11 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 
-# 测试环境配置
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
 
-# 生产环境的配置
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')

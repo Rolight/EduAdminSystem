@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#coding=utf-8
 import os
 
 from app import create_app, db
@@ -14,6 +16,14 @@ def make_shell_context():
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
+
+# run the unit test
+@manager.command
+def test():
+    import unittest
+    test = unittest.TestLoader().discover('tests')
+    unittest.TextTestRunner(verbosity=2).run(test)
+
 
 if __name__ == '__main__':
     manager.run()

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 教务管理系统 - 用户登陆 {% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>登陆</h1>
+</div>
+
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+
+{% endblock %}
