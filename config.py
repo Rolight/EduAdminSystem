@@ -22,6 +22,9 @@ class Config:
     # 角色
     ROLES = [(1, u'本科生'), (2, u'研究生'), (3, u'博士生')]
 
+    # 超级管理员用户名
+    ADMIN = u'admin'
+
     @staticmethod
     def init_app(app):
         pass

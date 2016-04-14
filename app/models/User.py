@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 #coding=utf-8
 
+from flask import current_app
 from app import db
+from app.models.Role import Role, Permission
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_required
@@ -21,8 +23,13 @@ class User(UserMixin, db.Model):
     }
 
     # 赋予角色
-    def __init__(self):
-        super()
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            if self.username == current_app.config['ADMIN']:
+                self.role = Role.query.filter_by(permissions=0xff).first()
+            if self.role is None:
+                self.role = Role.query.filter_by(default=True).first()
 
     def __repr__(self):
         return '<User %r, role %s>' % (self.name, self.role.name)
@@ -37,6 +44,26 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    # 判断用户是否拥有某个权限
+    def can(self, permission):
+        return self.role is not None and (self.role.permissions & permission) == permission
+
+    # 是否是超级管理员
+    def is_admin(self):
+        return self.role.permissions == Permission.ADMIN
+
+    # 是否是学生
+    def is_student(self):
+        return self.role.permissions == Permission.STUDENT
+
+    # 是否是老师
+    def is_teacher(self):
+        return self.role.permissions == Permission.TEACHER
+
+    # 是否是院系用户
+    def is_department(self):
+        return self.role.permissions == Permission.DEPARTMENT
 
 # 三种用户类型，模型继承User类
 # 学生用户

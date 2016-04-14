@@ -30,11 +30,17 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
 
+    # 主页
     from app.views.main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    # 用户认证相关
     from app.views.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    # 超级管理员相关
+    from app.views.admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
 
     return app
