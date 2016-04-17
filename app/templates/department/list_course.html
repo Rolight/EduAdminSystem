@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 教务管理系统 - 本院课程 {% endblock %}
+
+{% block page_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1>本院课程</h1>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>课程代码</th>
+                    <th>课程名称</th>
+                    <th>课程性质</th>
+                    <th>学分</th>
+                    <th>开课学院</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <th scope="row">{{ course.code }}</th>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.nature }}</td>
+                    <td>{{ course.credit }}</td>
+                    <td>{{ course.department.name }}</td>
+                    <td>
+                        <a href="{{ url_for('department.edit_course', id=course.id) }}">编辑</a>
+                        <a href="{{ url_for('department.del_course', id=course.id) }}"></a>
+                    </td>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

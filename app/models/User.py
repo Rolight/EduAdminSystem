@@ -15,11 +15,18 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique = True)
     type = db.Column(db.String(50))
     password_hash = db.Column(db.String(128))
+
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
+    # 公告
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+
+    # 安排
+    arranges = db.relaship('Arrange', backref='teacher', lazy='dynamic')
+
     __mapper_args__ = {
-        'ploymorphic_identity':'user',
-        'polymorphic_on':type
+        'polymorphic_identity': 'user',
+        'polymorphic_on': type
     }
 
     # 赋予角色
@@ -90,12 +97,12 @@ class StudentUser(User):
     # 院系
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     # 专业
-    major_id = db.Column(db.Integer, db.ForeignKey('majors.id'))
+    major_id = db.Column(db.Integer, db.ForeignKey('majors.id'), nullable=False)
     # 班级
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
 
     __mapper_args__ = {
-        'ploymorphic_identity':'student',
+        'polymorphic_identity': 'student',
     }
 
     def __repr__(self):
@@ -119,14 +126,14 @@ class TeacherUser(User):
     # 出生年月
     birthday = db.Column(db.Date)
     # 入学年份
-    in_time = db.Column(db.Integer, nullable=False)
+    in_time = db.Column(db.Integer)
     # 职位
     degree = db.Column(db.String(10), nullable=False)
     # 院系
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
 
     __mapper_args__ = {
-        'ploymorphic_identity':'teacher',
+        'polymorphic_identity': 'teacher',
     }
 
     def __repr__(self):
@@ -142,7 +149,7 @@ class DepartmentUser(User):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
 
     __mapper_args__ = {
-        'ploymorphic_identity':'department',
+        'polymorphic_identity': 'department',
     }
 
     def __repr__(self):
@@ -155,3 +162,11 @@ from .. import login_manager
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+def add_administrator_user():
+    admin = User(
+        username=current_app.config['ADMIN'],
+        password=current_app.config['ADMIN_PASSWORD']
+    )
+    db.session.add(admin)
+    db.session.commit()

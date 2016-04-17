@@ -28,4 +28,4 @@ def teacher_required(f):
     return permission_required(Permission.TEACHER)(f)
 
 def department_required(f):
-    return department_required(Permission.DEPARTMENT)(f)
+    return permission_required(Permission.DEPARTMENT)(f)

@@ -3,9 +3,18 @@
 import os
 
 from app import create_app, db
-from app.models import User, Role
+
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
+
+from app.models.User import User, DepartmentUser, TeacherUser, StudentUser
+from app.models.Class import Class
+from app.models.Department import Department
+from app.models.TimeSpan import TimeSpan
+from app.models.Place import Place
+from app.models.Major import Major
+from app.models.Role import Role
+from app.models.Post import Post
 
 # 导入默认配置文件
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -14,7 +23,21 @@ manager = Manager(app)
 migrate = Migrate(app, db)
 
 def make_shell_context():
-    return dict(app = app, db = db, User = User, Role = Role)
+    return dict(
+        app=app,
+        db=db,
+        User=User,
+        Role=Role,
+        DepartmentUser=Department,
+        TeacherUser=TeacherUser,
+        StudentUser=StudentUser,
+        Class=Class,
+        Department=Department,
+        TimeSpan=TimeSpan,
+        Place=Place,
+        Major=Major,
+        Post=Post
+    )
 
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)

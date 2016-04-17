@@ -6,14 +6,12 @@ from flask import render_template, session, redirect, url_for
 from . import main
 from .forms import NameForm
 from app import db
-from app.models import User
+from app.models.Post import Post
 
+# todo:在文章过多的时候分页
+# todo:支持使用简单的MarkDown编辑器
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    form = NameForm()
-    if form.validate_on_submit():
-        return redirect(url_for('.index'))
-
-    return render_template('index.html', form=form, name=session.get('name'), know=session.get('known', False),
-                           current_time=datetime.utcnow())
+    posts = Post.query.order_by(Post.post_time.desc()).all()
+    return render_template('main/index.html', posts=posts)
 

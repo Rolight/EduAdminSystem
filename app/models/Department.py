@@ -17,6 +17,8 @@ class Department(db.Model):
     teachers = db.relationship('TeacherUser', backref='department', lazy='dynamic')
     # 院系管理员
     managers = db.relationship('DepartmentUser', backref='department', lazy='dynamic')
+    # 下属课程
+    courses = db.relationship('Course', backref='department', lazy='dynamic')
 
     def __repr__(self):
         return '<Department: %r>' % self.name

@@ -10,6 +10,7 @@ class Place(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False, unique=True)
+    arranges = db.relationship('Arrange', backref='place', lazy='dynamic')
 
     def __repr__(self):
         return '<class: %r>' % (self.name)

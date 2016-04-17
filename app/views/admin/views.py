@@ -14,7 +14,7 @@ from .forms import AddClassForm, AddDepartmentForm, AddMajorForm
 
 
 # 添加院系页面
-@admin.route('add/department', methods=['GET', 'POST'])
+@admin.route('/add/department', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def add_department():
@@ -27,11 +27,12 @@ def add_department():
         return redirect(request.args.get('next') or url_for('main.index'))
     return render_template('admin/add_department.html', form=form)
 
-@admin.route('add/class', methods=['GET', 'POST'])
+@admin.route('/add/class', methods=['GET', 'POST'])
 @login_required
 @department_required
 def add_class():
     form = AddClassForm()
+    form.set_choices()
     if form.validate_on_submit():
         rclass = Class(name=form.name.data, major_id=form.major_name.data)
         db.session.add(rclass)
@@ -40,11 +41,12 @@ def add_class():
         return redirect(request.args.get('next') or url_for('main.index'))
     return render_template('admin/add_class.html', form=form)
 
-@admin.route('add/major', methods=['GET', 'POST'])
+@admin.route('/add/major', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def add_major():
     form = AddMajorForm()
+    form.set_choices()
     if form.validate_on_submit():
         major = Major(name=form.name.data, department_id=form.department_name.data)
         db.session.add(major)
@@ -52,4 +54,5 @@ def add_major():
         flash(u'添加成功')
         return redirect(request.args.get('next') or url_for('main.index'))
     return render_template('admin/add_major.html', form=form)
+
 

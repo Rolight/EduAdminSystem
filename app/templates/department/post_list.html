@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 教务管理系统 - 我的公告 {% endblock %}
+
+{% block page_content %}
+<ul class="posts">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1>我的公告</h1>
+        </div>
+    </div>
+    {% for post in posts %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="thumbnail">
+            <div class="caption">
+                <h3>{{ post.title }}</h3>
+                <p>发布者：{{ post.get_author_name() }}</p>
+                <p>发布时间：{{ moment(post.post_time).format('MMMM Do YYYY, h:mm:ss a') }}</p>
+                <p>{{ post.body }}</p>
+                <p>
+                    <a href="{{ url_for('department.edit_post', id=post.id) }}" class="btn btn-primary" role="button">编辑</a>
+                    <a href="{{ url_for('department.del_post', id=post.id) }}" class="btn btn-danger" role="button">删除</a>
+                </p>
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</ul>
+
+{% endblock %}

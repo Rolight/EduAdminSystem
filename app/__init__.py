@@ -42,5 +42,9 @@ def create_app(config_name):
     from app.views.admin import admin as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
+    # 院系用户相关
+    from app.views.department import department as department_blueprint
+    app.register_blueprint(department_blueprint, url_prefix='/department')
+
 
     return app

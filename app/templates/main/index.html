@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block title %} 教务管理系统-主页 {% endblock %}
+
+{% block page_content %}
+
+<div class="container-fluid">
+<ul class="posts">
+    <div class="row">
+        <h1>教务公告</h1>
+    </div>
+    <div class="row">
+             &nbsp;
+    </div>
+    {% for post in posts %}
+    <div class="row">
+            <div class="jumbotron">
+                <h3>{{ post.title }}</h3>
+                <p>发布者：{{ post.get_author_name() }}</p>
+                <p>发布时间：{{ moment(post.post_time).format('YYYY年MM月DD日 HH:mm:ss ') }}</p>
+                <p>{{ post.body }}</p>
+            </div>
+    </div>
+    {% endfor %}
+</ul>
+</div>
+
+{% endblock %}
