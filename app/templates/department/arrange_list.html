@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 教务管理系统 - 本院课程 {% endblock %}
+
+{% block page_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1>本院课程</h1>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>学年学期</th>
+                    <th>课程代码</th>
+                    <th>课程名称</th>
+                    <th>上课教师</th>
+                    <th>上课地点</th>
+                    <th>上课时间</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for arrange in arranges %}
+                    <th scope="row">{{ arrange.year }}学年第{{ arrange.semaster }}学期</th>
+                    <td>{{ arrange.course.code }}</td>
+                    <td>{{ arrange.course.name }}</td>
+                    <td>{{ arrange.teacher.get_teacher().name }}</td>
+                    <td>{{ arrange.place.name }}</td>
+                    <td>{{ arrange.timespan.name }}</td>
+                    <td>
+                        <a href="{{ url_for('department.arrange_course_timespan', year=arrange.year, semaster=arrange.semaster, course_id=arrange.course.id, teacher_id=arrange.teacher.id, place_id=arrange.place.id) }}">添加时间</a>
+                        <a href="{{ url_for('department.del_arrange', id=arrange.id) }}">删除</a>
+                    </td>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

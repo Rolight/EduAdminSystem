@@ -17,10 +17,15 @@ class Permission:
 # 用户角色
 class Role(db.Model):
     __tablename__ = 'roles'
+    # 编号
     id = db.Column(db.Integer, primary_key = True)
+    # 名称
     name = db.Column(db.String(64), unique = True)
+    # 是否默认
     default = db.Column(db.Boolean, default = False, index = True)
+    # 权限
     permissions = db.Column(db.Integer)
+
     users = db.relationship('User', backref = 'role', lazy = 'dynamic')
     def __repr__(self):
         return '<Role %r>' % self.name

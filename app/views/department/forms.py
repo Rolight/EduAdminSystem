@@ -3,8 +3,16 @@
 
 from flask import current_app
 from flask_wtf import Form
-from wtforms import StringField, SubmitField, TextAreaField, SelectField, FloatField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, SubmitField, TextAreaField,\
+    SelectField, FloatField, IntegerField, Label
+from wtforms.validators import DataRequired, Length, NumberRange
+
+from app.time import now_semaster, now_year
+from app.models.Course import Course
+from app.models.User import TeacherUser
+from app.models.Place import Place
+from app.models.TimeSpan import TimeSpan
+from app.models.Arrange import Arrange, ArrangeTime
 
 # 公告编辑表单
 class PostForm(Form):
@@ -25,3 +33,45 @@ class CourseForm(Form):
     def set_choices(self):
         self.nature.choices = current_app.config['COURSE_NATURE']
 
+
+# 添加本学期课程安排
+class ArrangeForm(Form):
+    year = IntegerField(u'学年', validators=[DataRequired(), NumberRange(min=2000, max=2100)])
+    semaster = IntegerField(u'学期', validators=[DataRequired(), NumberRange(min=1, max=3)])
+    course = SelectField(u'课程', validators=[DataRequired()], coerce=int)
+    teacher = SelectField(u'授课教师', validators=[DataRequired()], coerce=int)
+    place = SelectField(u'上课地点', validators=[DataRequired()], coerce=int)
+    all_timespan = []
+
+    submit = SubmitField(u'添加课程安排')
+
+    def set_choices(self, department_id):
+        self.course.choices = \
+            [(x.id, x.name) for x in Course.query.filter_by(department_id=department_id).all()]
+        self.teacher.choices = \
+            [(x.id, x.name) for x in TeacherUser.query.filter_by(department_id=department_id).all()]
+        self.place.choices = \
+            [(x.id, x.name) for x in Place.query.all()]
+
+        self.timespan.choices = self.all_timespan
+        self.year.data = now_year
+        self.semaster.data = now_semaster
+
+
+class ArrangeTimeSpanForm(Form):
+    timespan = SelectField(u'上课时间', coerce=int)
+    submit = SubmitField(u'添加时间')
+
+    def set_choices(self, arrange_id):
+        arrange = Arrange.query.filter_by(id=arrange_id).first()
+        year = arrange.year
+        semaster = arrange.semaster
+        place_id = arrange.place_id
+        occur = [x.timespan_id for x in Arrange.query.filter_by(year=year, semaster=semaster, place_id=place_id).all()]
+        occur += [x.timespan_id for x in ArrangeTime.query.filter_by(id=arrange_id).all()]
+        all_time = [(x.id, x.name) for x in TimeSpan.query.all()]
+        res = []
+        for i in all_time:
+            if i[0] not in occur:
+                res.append(i)
+        self.timespan.choices = res

@@ -15,6 +15,9 @@ from app.models.Place import Place
 from app.models.Major import Major
 from app.models.Role import Role
 from app.models.Post import Post
+from app.models.Course import Course
+from app.models.Arrange import Arrange
+from app.models.Grades import Grades, selectCourse
 
 # 导入默认配置文件
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -36,7 +39,11 @@ def make_shell_context():
         TimeSpan=TimeSpan,
         Place=Place,
         Major=Major,
-        Post=Post
+        Post=Post,
+        Course=Course,
+        Arrange=Arrange,
+        Grades=Grades,
+        selectCourse=selectCourse
     )
 
 manager.add_command("shell", Shell(make_context=make_shell_context))

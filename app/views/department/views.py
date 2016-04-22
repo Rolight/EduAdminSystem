@@ -10,11 +10,12 @@ from app.models.Role import Permission
 from app.models.Post import Post
 from app.models.Course import Course
 from app.models.User import DepartmentUser
+from app.models.Arrange import Arrange, ArrangeTime
 
 from datetime import datetime
 
 from . import department
-from .forms import PostForm, CourseForm
+from .forms import PostForm, CourseForm, ArrangeForm, ArrangeTimeSpanForm
 
 # 发布公告
 @department.route('/post/add', methods=['GET', 'POST'])
@@ -159,3 +160,81 @@ def del_course(id):
     db.session.delete(course)
     db.session.commit()
     return redirect(url_for('department.list_course'))
+
+
+# 安排课程
+@department.route('course/arrange', methods=['GET', 'POST'])
+@login_required
+@department_required
+def arrange_course():
+    nowdep = DepartmentUser.query.filter_by(id=current_user.id).first()
+    form = ArrangeForm()
+    form.set_choices(nowdep.department.id)
+    if form.validate_on_submit():
+        arrange = Arrange(
+            year=form.year.data,
+            semaster=form.semaster.data,
+            course_id=form.course.data,
+            teacaher_id=form.teacher.data,
+            place_id=form.place.data,
+            department_id=nowdep.department.id
+        )
+        db.session.add(arrange)
+        db.session.commit()
+        flash(u'你已经成功添加了一门课程安排，现在请安排上课时间')
+        return redirect(url_for('department.arrange_course_timespan', arrange_id=arrange.id))
+    return render_template('department/arrange_course.html', form=form)
+
+# 安排课程时间
+@department.route('course/arrange_time/<int:arrange_id>', methods=['GET', 'POST'])
+@login_required
+@department_required
+def arrange_course_timespan(arrange_id):
+    form = ArrangeTimeSpanForm()
+    form.set_choices(arrange_id=arrange_id)
+    choosed = ArrangeTime.query.filter_by(id=arrange_id).all()
+    if form.validate_on_submit():
+        arrange_time = ArrangeTime(
+            id = arrange_id,
+            timespan_id=form.timespan.data
+        )
+        db.session.add(arrange_time)
+        db.session.commit()
+    return render_template(
+        'department/arrange_course_time.html',
+        form=form,
+        choosed=choosed)
+
+# 删除课程安排时间
+@department.route('course/arrange_time/del/<int:arrange_id>/<int:timespan_id>')
+@login_required
+@department_required
+def del_course_timespan(arrange_id, timespan_id):
+    result = ArrangeTime.query.filter_by(id=arrange_id, timespan_id=timespan_id).first()
+    if result:
+        db.session.delete(result)
+        db.session.commit()
+    return redirect(url_for('department.arrange_course_timespan', arrange_id=arrange_id))
+
+# 显示课程安排列表
+@department.route('course/arrange/list', methods=['GETk'])
+@login_required
+@department_required
+def arrange_list():
+    current_department = DepartmentUser.query.filter_by(current_user.id).first().department
+    arranges = Arrange.query.filter_by(department=current_department).order_by(Arrange.year.desc()).all()
+    return render_template(
+        'department/arrange_list.html',
+        arranges=arranges
+    )
+
+# 删除课程安排
+@department.route('course/arrange/del/<int:id>', methods=['GET'])
+@login_required
+@department_required
+def del_arrange(id):
+    arrange = Arrange.query.filter_by(id=id).first()
+    if arrange is not None:
+        db.session.delete(arrange)
+        db.session.commit()
+    return redirect(url_for('department.arrange_list'))

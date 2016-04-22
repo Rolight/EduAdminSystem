@@ -7,9 +7,12 @@ from . import Major
 class TimeSpan(db.Model):
     __tablename__ = 'timespans'
 
+    # 编号
     id = db.Column(db.Integer, primary_key=True)
+    # 名称
     name = db.Column(db.String(64), nullable=False, unique=True)
-    arranges = db.relationship('Arrange', backref='timespan', lazy='dynamic')
+
+    arranges = db.relationship('ArrangeTime', backref='timespan', lazy='dynamic')
 
     def __repr__(self):
         return '<class: %r>' % (self.name)

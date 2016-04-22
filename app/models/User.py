@@ -4,6 +4,7 @@
 from flask import current_app
 from app import db
 from app.models.Role import Role, Permission
+from app.models.Grades import Grades, selectCourse
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_required
@@ -22,7 +23,16 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     # 安排
-    arranges = db.relaship('Arrange', backref='teacher', lazy='dynamic')
+    arranges = db.relationship('Arrange', backref='teacher', lazy='dynamic')
+
+    # 选课
+    selected = db.relationship(
+        'Arrange',
+        secondary=selectCourse,
+        backref=db.backref('students', lazy='dynamic'),
+        cascade='all, delete-orphan',
+        single_parent=True
+    )
 
     __mapper_args__ = {
         'polymorphic_identity': 'user',
@@ -71,6 +81,18 @@ class User(UserMixin, db.Model):
     # 是否是院系用户
     def is_department(self):
         return self.role.permissions == Permission.DEPARTMENT
+
+    # 获取学生对象
+    def get_student(self):
+        return StudentUser.query.filter_by(id=self.id).first()
+
+    # 获取教师对象
+    def get_teacher(self):
+        return TeacherUser.query.filter_by(id=self.id).first()
+
+    # 获取院系对象
+    def get_department(self):
+        return DepartmentUser.query.filter_by(id=self.id).first()
 
 # 三种用户类型，模型继承User类
 # 学生用户

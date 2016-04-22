@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 教务管理系统 - 公告编辑 {% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>给课程安排添加上课时间</h1>
+</div>
+
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+
+</div>
+<div class="row">
+    <h4>管理已经添加的时间</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>课程时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for val in choosed %}
+            <th scope="row">{{ val.timespan.name }}</th>
+            <td>
+                <a href="{{ url_for('department.del_arrange_time', id=val.id, timespan_id=val.timespan_id) }}">
+                    删除
+                </a>
+            </td>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

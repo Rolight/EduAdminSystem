@@ -31,7 +31,7 @@
                     <td>{{ course.department.name }}</td>
                     <td>
                         <a href="{{ url_for('department.edit_course', id=course.id) }}">编辑</a>
-                        <a href="{{ url_for('department.del_course', id=course.id) }}"></a>
+                        <a href="{{ url_for('department.del_course', id=course.id) }}">删除</a>
                     </td>
                 {% endfor %}
             </tbody>

@@ -6,7 +6,9 @@ from app import db
 class Department(db.Model):
     __tablename__ = 'departments'
 
+    # 编号
     id = db.Column(db.Integer, primary_key=True)
+    # 院系名称
     name = db.Column(db.String(64), nullable=False, unique=True)
 
     # 下属专业
@@ -19,6 +21,8 @@ class Department(db.Model):
     managers = db.relationship('DepartmentUser', backref='department', lazy='dynamic')
     # 下属课程
     courses = db.relationship('Course', backref='department', lazy='dynamic')
+    # 下属课程拿牌
+    arranges = db.relationship('Arrange', backref='department', lazy='dynamic')
 
     def __repr__(self):
         return '<Department: %r>' % self.name

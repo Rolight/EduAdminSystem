@@ -5,7 +5,7 @@ from app import db
 
 class Course(db.Model):
 
-    __tabelname__ = 'courses'
+    __tablename__ = 'courses'
 
     id = db.Column(db.Integer, primary_key=True)
 

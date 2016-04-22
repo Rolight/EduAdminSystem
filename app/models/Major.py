@@ -7,10 +7,13 @@ from . import Department
 class Major(db.Model):
     __tablename__ = 'majors'
 
+    # 专业编号
     id = db.Column(db.Integer, primary_key=True)
+    # 专业名称
     name = db.Column(db.String(64), unique=True, nullable=False)
-
+    # 院系编号
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+
     # 下属班级
     classes = db.relationship('Class', backref='major', lazy='dynamic')
     # 下属学生
