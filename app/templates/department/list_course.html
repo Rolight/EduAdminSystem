@@ -24,6 +24,7 @@
             </thead>
             <tbody>
                 {% for course in courses %}
+                <tr>
                     <th scope="row">{{ course.code }}</th>
                     <td>{{ course.name }}</td>
                     <td>{{ course.nature }}</td>
@@ -33,6 +34,7 @@
                         <a href="{{ url_for('department.edit_course', id=course.id) }}">编辑</a>
                         <a href="{{ url_for('department.del_course', id=course.id) }}">删除</a>
                     </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>

@@ -8,9 +8,10 @@
     <h1>给课程安排添加上课时间</h1>
 </div>
 
-<div class="col-md-4">
-    {{ wtf.quick_form(form) }}
-
+<div class="row">
+    <div class="col-md-4">
+        {{ wtf.quick_form(form) }}
+    </div>
 </div>
 <div class="row">
     <h4>管理已经添加的时间</h4>
@@ -23,12 +24,14 @@
         </thead>
         <tbody>
         {% for val in choosed %}
+        <tr>
             <th scope="row">{{ val.timespan.name }}</th>
             <td>
-                <a href="{{ url_for('department.del_arrange_time', id=val.id, timespan_id=val.timespan_id) }}">
+                <a href="{{ url_for('department.del_course_timespan', arrange_id=val.id, timespan_id=val.timespan_id) }}">
                     删除
                 </a>
             </td>
+        </tr>
         {% endfor %}
         </tbody>
     </table>

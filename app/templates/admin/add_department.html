@@ -1,15 +1,42 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %} 教务管理系统 - 添加院系 {% endblock %}
+{% block title %} 教务管理系统 - 院系管理 {% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>院系添加</h1>
+    <h1>院系管理</h1>
 </div>
 
-<div class="col-md-4">
+<h3>院系添加</h3>
+<div class="row">
+    <div class="col-md-4">
     {{ wtf.quick_form(form) }}
+    </div>
+</div>
+<h3>管理已有院系</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>院系名称</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for department in departments %}
+                <tr>
+                    <th scope="row">{{ department.name }}</th>
+                    <td>
+                        <a href="{{ url_for('admin.del_department', id=department.id) }}">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock %}

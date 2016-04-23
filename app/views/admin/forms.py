@@ -55,3 +55,18 @@ class AddClassForm(Form):
 
     def set_choices(self):
         self.major_name.choices = get_majors_choices_list()
+
+# 添加上课地点表单
+class AddPlaceForm(Form):
+
+    name = StringField(u'上课地点名称', validators=[DataRequired(), Length(1, 32)])
+
+    submit = SubmitField(u'添加')
+
+# 添加上课时间表单
+class AddTimeSpanForm(Form):
+
+    name = StringField(u'上课时间', validators=[DataRequired(), Length(1, 32)])
+
+    submit = SubmitField(u'添加')
+

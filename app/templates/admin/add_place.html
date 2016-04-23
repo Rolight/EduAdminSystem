@@ -1,37 +1,35 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %} 教务管理系统 - 专业管理 {% endblock %}
+{% block title %} 教务管理系统 - 上课地点管理 {% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>专业管理</h1>
+    <h1>上课地点管理</h1>
 </div>
 
-<h3>添加专业</h3>
+<h3>添加上课地点</h3>
 <div class="row">
     <div class="col-md-4">
     {{ wtf.quick_form(form) }}
     </div>
 </div>
-<h3>已有专业管理</h3>
+<h3>已有上课地点管理</h3>
 
 <div class="row">
         <table class="table">
             <thead>
                 <tr>
-                    <th>专业名称</th>
-                    <th>院系</th>
+                    <th>地点名称</th>
                     <th>#</th>
                 </tr>
             </thead>
             <tbody>
-                {% for major in majors %}
+                {% for place in places %}
                 <tr>
-                    <th scope="row">{{ major.name }}</th>
-                    <td>{{ major.department.name }}</td>
+                    <th scope="row">{{ place.name }}</th>
                     <td>
-                        <a href="{{ url_for('admin.del_major', id=major.id) }}">删除</a>
+                        <a href="{{ url_for('admin.del_place', id=place.id) }}">删除</a>
                     </td>
                 </tr>
                 {% endfor %}

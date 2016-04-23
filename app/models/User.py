@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 #coding=utf-8
 
-from flask import current_app
+from flask import current_app, flash
 from app import db
 from app.models.Role import Role, Permission
 from app.models.Grades import Grades, selectCourse
+from app.models.Arrange import Arrange, ArrangeTime
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_required
@@ -22,17 +23,8 @@ class User(UserMixin, db.Model):
     # 公告
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
-    # 安排
-    arranges = db.relationship('Arrange', backref='teacher', lazy='dynamic')
 
-    # 选课
-    selected = db.relationship(
-        'Arrange',
-        secondary=selectCourse,
-        backref=db.backref('students', lazy='dynamic'),
-        cascade='all, delete-orphan',
-        single_parent=True
-    )
+
 
     __mapper_args__ = {
         'polymorphic_identity': 'user',
@@ -94,6 +86,7 @@ class User(UserMixin, db.Model):
     def get_department(self):
         return DepartmentUser.query.filter_by(id=self.id).first()
 
+
 # 三种用户类型，模型继承User类
 # 学生用户
 class StudentUser(User):
@@ -123,12 +116,61 @@ class StudentUser(User):
     # 班级
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
 
+    # 选课
+    selected = db.relationship(
+        Arrange,
+        secondary=selectCourse,
+        backref=db.backref('students', lazy='dynamic'),
+        cascade='all, delete-orphan',
+        single_parent=True,
+        lazy='dynamic'
+    )
+
+
     __mapper_args__ = {
         'polymorphic_identity': 'student',
     }
 
     def __repr__(self):
         return '<student: %r, %r %r %r>' % (self.name, self.department, self.major, self.rclass)
+
+     # 判断是否已经选了某个课程
+    def is_selected(self, arrange_id):
+        return self.selected.filter(Arrange.id == arrange_id).first() is not None
+
+    # 判断是否出现选课冲突
+    def can_selected(self, arrange_id):
+        arrange_times = [x.timespan_id for x in ArrangeTime.query.filter_by(id=arrange_id).all()]
+        selected_times = []
+        for arrange in self.selected:
+            selected_times += [x.timespan_id for x in ArrangeTime.query.filter_by(id=arrange.id).all()]
+        for timespan in arrange_times:
+            if timespan in selected_times:
+                return False
+        return True
+
+    # 选课
+    def select_course(self, arrange_id):
+        if not self.is_selected(arrange_id) and self.can_selected(arrange_id):
+            g1 = Grades(student_id=self.id, arrange_id=arrange_id)
+            self.selected.append(Arrange.query.filter_by(id=arrange_id).first())
+            db.session.add(self)
+            db.session.add(g1)
+            db.session.commit()
+        else:
+            flash(u'上课时间冲突！')
+
+    # 退选
+    def unselect_course(self, arrange_id):
+        if self.is_selected(arrange_id):
+            sc = selectCourse
+            delt = sc.delete(sc.c.arrange_id == arrange_id and sc.c.student_id == self.id)
+            db.session.execute(delt)
+            g1 = Grades.query.filter_by(student_id=self.id).first()
+            if g1 is not None:
+                db.session.delete(g1)
+            db.session.commit()
+
 
 class TeacherUser(User):
     __tablename__ = 'teachers'
@@ -153,6 +195,8 @@ class TeacherUser(User):
     degree = db.Column(db.String(10), nullable=False)
     # 院系
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
+    # 安排
+    arranges = db.relationship('Arrange', backref='teacher', lazy='dynamic')
 
     __mapper_args__ = {
         'polymorphic_identity': 'teacher',

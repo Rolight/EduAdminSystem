@@ -1,15 +1,44 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %} 教务管理系统 - 添加专业 {% endblock %}
+{% block title %} 教务管理系统 - 班级管理 {% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>专业添加</h1>
+    <h1>班级管理</h1>
 </div>
 
-<div class="col-md-4">
+<h3>添加班级</h3>
+
+<div class="row">
+    <div class="col-md-4">
     {{ wtf.quick_form(form) }}
+    </div>
+</div>
+
+<h3>已有班级管理</h3>
+
+<div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>班级名称</th>
+                    <th>专业</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rclass in classes %}
+                <tr>
+                    <th scope="row">{{ rclass.name }}</th>
+                    <td>{{ rclass.major.name }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.del_class', id=rclass.id) }}">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 </div>
 
 {% endblock %}

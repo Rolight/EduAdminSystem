@@ -16,7 +16,7 @@ from app.models.Major import Major
 from app.models.Role import Role
 from app.models.Post import Post
 from app.models.Course import Course
-from app.models.Arrange import Arrange
+from app.models.Arrange import Arrange, ArrangeTime
 from app.models.Grades import Grades, selectCourse
 
 # 导入默认配置文件
@@ -42,6 +42,7 @@ def make_shell_context():
         Post=Post,
         Course=Course,
         Arrange=Arrange,
+        ArrangeTime=ArrangeTime,
         Grades=Grades,
         selectCourse=selectCourse
     )

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %} 教务管理系统 - 本院课程 {% endblock %}
+{% block title %} 教务管理系统 - 学生选课 {% endblock %}
 
 {% block page_content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <h1>本院课程</h1>
+            <h1>可选课表</h1>
         </div>
     </div>
     <div class="row">
@@ -17,9 +17,12 @@
                     <th>学年学期</th>
                     <th>课程代码</th>
                     <th>课程名称</th>
+                    <th>课程性质</th>
+                    <th>学分</th>
                     <th>上课教师</th>
                     <th>上课地点</th>
                     <th>上课时间</th>
+                    <th>开课学院</th>
                     <th>#</th>
                 </tr>
             </thead>
@@ -29,12 +32,18 @@
                     <th scope="row">{{ arrange.year }}学年第{{ arrange.semaster }}学期</th>
                     <td>{{ arrange.course.code }}</td>
                     <td>{{ arrange.course.name }}</td>
+                    <td>{{ arrange.course.nature }}</td>
+                    <td>{{ arrange.course.credit }}</td>
                     <td>{{ arrange.teacher.get_teacher().name }}</td>
                     <td>{{ arrange.place.name }}</td>
                     <td>{{ arrange.get_timespan() }}</td>
+                    <td>{{ arrange.department.name }}</td>
                     <td>
-                        <a href="{{ url_for('department.arrange_course_timespan', arrange_id=arrange.id) }}">修改上课时间</a>
-                        <a href="{{ url_for('department.del_arrange', id=arrange.id) }}">删除</a>
+                        {% if not current_user.is_selected(arrange.id) %}
+                        <a href="{{ url_for('student.select_course', id=arrange.id) }}">选课</a>
+                        {% else %}
+                        <a href="{{ url_for('student.unselect_course', id=arrange.id) }}">退选</a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

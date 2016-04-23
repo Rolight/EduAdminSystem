@@ -21,7 +21,7 @@ class Department(db.Model):
     managers = db.relationship('DepartmentUser', backref='department', lazy='dynamic')
     # 下属课程
     courses = db.relationship('Course', backref='department', lazy='dynamic')
-    # 下属课程拿牌
+    # 下属课程安排
     arranges = db.relationship('Arrange', backref='department', lazy='dynamic')
 
     def __repr__(self):

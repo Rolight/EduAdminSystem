@@ -1,0 +1,29 @@
+
+
+<li><a href="{{ url_for('admin.add_major') }}">专业管理</a></li>
+
+<li><a href="{{ url_for('admin.add_class') }}">班级管理</a></li>
+
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">公告管理<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="{{ url_for('department.post') }}">发布公告</a></li>
+        <li><a href="{{ url_for('department.post_list') }}">公告列表</a></li>
+    </ul>
+</li>
+
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">课程管理<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="{{ url_for('department.add_course') }}">添加课程</a></li>
+        <li><a href="{{ url_for('department.list_course') }}">课程列表</a></li>
+    </ul>
+</li>
+
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">课程安排<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="{{ url_for('department.arrange_course') }}">添加新的课程安排</a></li>
+        <li><a href="{{ url_for('department.arrange_list') }}">课程安排列表</a></li>
+    </ul>
+</li>

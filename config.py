@@ -11,6 +11,7 @@ class Config:
     FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
     FLASKY_MAIL_SENDER = 'Flasky Admin <flasky@example>'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    host = '0.0.0.0'
 
     # 一些可能和学校相关的常量定义
 
@@ -27,7 +28,7 @@ class Config:
     ROLES = [(1, u'本科生'), (2, u'研究生'), (3, u'博士生')]
 
     # 课程性质
-    COURSE_NATURE = [(u'公共基础课'), (u'专业选修课'), (u'专业核心课')]
+    COURSE_NATURE = [(u'公共基础课', u'公共基础课'), (u'专业选修课', u'专业选修课'), (u'专业核心课', u'专业核心课')]
 
     # 超级管理员用户名
     ADMIN = u'admin'

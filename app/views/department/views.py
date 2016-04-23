@@ -109,7 +109,7 @@ def add_course():
         db.session.commit()
         flash(u'添加课程成功')
         return redirect(request.args.get('next') or url_for('department.list_course'))
-    return render_template('department/add_course.html')
+    return render_template('department/add_course.html', form=form)
 
 # 显示课程列表
 @department.route('/course/list', methods=['GET'])
@@ -175,13 +175,13 @@ def arrange_course():
             year=form.year.data,
             semaster=form.semaster.data,
             course_id=form.course.data,
-            teacaher_id=form.teacher.data,
+            teacher_id=form.teacher.data,
             place_id=form.place.data,
             department_id=nowdep.department.id
         )
         db.session.add(arrange)
         db.session.commit()
-        flash(u'你已经成功添加了一门课程安排，现在请安排上课时间')
+        flash(u'你已经成功添加了一门课程安排，请为其安排上课时间')
         return redirect(url_for('department.arrange_course_timespan', arrange_id=arrange.id))
     return render_template('department/arrange_course.html', form=form)
 
@@ -192,7 +192,6 @@ def arrange_course():
 def arrange_course_timespan(arrange_id):
     form = ArrangeTimeSpanForm()
     form.set_choices(arrange_id=arrange_id)
-    choosed = ArrangeTime.query.filter_by(id=arrange_id).all()
     if form.validate_on_submit():
         arrange_time = ArrangeTime(
             id = arrange_id,
@@ -200,6 +199,7 @@ def arrange_course_timespan(arrange_id):
         )
         db.session.add(arrange_time)
         db.session.commit()
+    choosed = ArrangeTime.query.filter_by(id=arrange_id).all()
     return render_template(
         'department/arrange_course_time.html',
         form=form,
@@ -217,11 +217,11 @@ def del_course_timespan(arrange_id, timespan_id):
     return redirect(url_for('department.arrange_course_timespan', arrange_id=arrange_id))
 
 # 显示课程安排列表
-@department.route('course/arrange/list', methods=['GETk'])
+@department.route('course/arrange/list', methods=['GET', 'POST'])
 @login_required
 @department_required
 def arrange_list():
-    current_department = DepartmentUser.query.filter_by(current_user.id).first().department
+    current_department = DepartmentUser.query.filter_by(id=current_user.id).first().department
     arranges = Arrange.query.filter_by(department=current_department).order_by(Arrange.year.desc()).all()
     return render_template(
         'department/arrange_list.html',

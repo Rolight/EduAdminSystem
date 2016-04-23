@@ -53,9 +53,8 @@ class ArrangeForm(Form):
         self.place.choices = \
             [(x.id, x.name) for x in Place.query.all()]
 
-        self.timespan.choices = self.all_timespan
-        self.year.data = now_year
-        self.semaster.data = now_semaster
+        self.year.data = now_year()
+        self.semaster.data = now_semaster()
 
 
 class ArrangeTimeSpanForm(Form):
@@ -64,11 +63,18 @@ class ArrangeTimeSpanForm(Form):
 
     def set_choices(self, arrange_id):
         arrange = Arrange.query.filter_by(id=arrange_id).first()
+
         year = arrange.year
         semaster = arrange.semaster
         place_id = arrange.place_id
-        occur = [x.timespan_id for x in Arrange.query.filter_by(year=year, semaster=semaster, place_id=place_id).all()]
-        occur += [x.timespan_id for x in ArrangeTime.query.filter_by(id=arrange_id).all()]
+
+        occur_arranges = Arrange.query.filter_by(place_id=place_id).all()
+        occur = []
+
+        for occur_arrange in occur_arranges:
+            for p in ArrangeTime.query.filter_by(id=occur_arrange.id).all():
+                occur.append(p.timespan_id)
+
         all_time = [(x.id, x.name) for x in TimeSpan.query.all()]
         res = []
         for i in all_time:
