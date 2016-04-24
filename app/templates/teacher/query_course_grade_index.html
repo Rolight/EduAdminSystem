@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 教务管理系统 - 成绩查询 {% endblock %}
+
+{% block page_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1>教学班成绩查询</h1>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>学年学期</th>
+                    <th>课程代码</th>
+                    <th>课程名称</th>
+                    <th>课程性质</th>
+                    <th>学分</th>
+                    <th>上课地点</th>
+                    <th>上课时间</th>
+                    <th>开课学院</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for arrange in arranges %}
+                <tr>
+                    <th scope="row">{{ arrange.year }}学年第{{ arrange.semaster }}学期</th>
+                    <td>{{ arrange.course.code }}</td>
+                    <td>{{ arrange.course.name }}</td>
+                    <td>{{ arrange.course.nature }}</td>
+                    <td>{{ arrange.course.credit }}</td>
+                    <td>{{ arrange.place.name }}</td>
+                    <td>{{ arrange.get_timespan() }}</td>
+                    <td>{{ arrange.department.name }}</td>
+                    <td>
+                        <a href="{{ url_for('teacher.query_course_grade', id=arrange.id) }}">成绩单查看</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

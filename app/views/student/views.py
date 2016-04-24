@@ -88,18 +88,113 @@ def query_course_schedule():
         schedule=schedule
     )
 
-# 查询成绩
-@student.route('/query/grade')
+from app.other import grade_to_GPA
+
+# 学期成绩
+@student.route('/query/grade/semaster')
 @login_required
 @student_required
-def query_grade():
+def query_grade_semaster():
     arranges = []
+    # 总学分
+    credit_sum = 0
+    # 学分绩点总和
+    credit_point_sum = 0
+    # 未通过学分
+    unpass_credit_sum = 0
+    # 平均绩点
+    gpa = 0
     for arrange in current_user.get_student().selected.all():
         if arrange.year == now_year() and arrange.semaster == now_semaster():
-            arranges.append((arrange, Grades.query.filter_by(student_id=current_user.id, arrange_id=arrange.id).first().grade))
+            grade = Grades.query.filter_by(student_id=current_user.id, arrange_id=arrange.id).first()
+            if grade is None or grade.grade is None:
+                continue
+            grade = grade.grade
+            arranges.append((arrange, grade, grade_to_GPA(grade)))
+            credit_sum += arrange.course.credit
+            credit_point_sum += arrange.course.credit * grade_to_GPA(grade)
+            if grade < 60:
+                unpass_credit_sum += arrange.course.credit
+    gpa = credit_point_sum / credit_sum
     return render_template(
         'student/query_grade.html',
-        arranges=arranges
+        arranges=arranges,
+        credit_sum=credit_sum,
+        credit_point_sum=credit_point_sum,
+        unpass_credit_sum=unpass_credit_sum,
+        gpa=gpa
     )
+
+
+# 学年成绩
+@student.route('/query/grade/year')
+@login_required
+@student_required
+def query_grade_year():
+    arranges = []
+    # 总学分
+    credit_sum = 0
+    # 学分绩点总和
+    credit_point_sum = 0
+    # 未通过学分
+    unpass_credit_sum = 0
+    # 平均绩点
+    gpa = 0
+    for arrange in current_user.get_student().selected.all():
+        if arrange.year == now_year():
+            grade = Grades.query.filter_by(student_id=current_user.id, arrange_id=arrange.id).first()
+            if grade is None or grade.grade is None:
+                continue
+            grade = grade.grade
+            arranges.append((arrange, grade, grade_to_GPA(grade)))
+            credit_sum += arrange.course.credit
+            credit_point_sum += arrange.course.credit * grade_to_GPA(grade)
+            if grade < 60:
+                unpass_credit_sum += arrange.course.credit
+    gpa = credit_point_sum / credit_sum
+    return render_template(
+        'student/query_grade.html',
+        arranges=arranges,
+        credit_sum=credit_sum,
+        credit_point_sum=credit_point_sum,
+        unpass_credit_sum=unpass_credit_sum,
+        gpa=gpa
+    )
+
+# 历年成绩
+@student.route('/query/grade/all')
+@login_required
+@student_required
+def query_grade_all():
+    arranges = []
+    # 总学分
+    credit_sum = 0
+    # 学分绩点总和
+    credit_point_sum = 0
+    # 未通过学分
+    unpass_credit_sum = 0
+    # 平均绩点
+    gpa = 0
+    for arrange in current_user.get_student().selected.all():
+        grade = Grades.query.filter_by(student_id=current_user.id, arrange_id=arrange.id).first()
+        if grade is None or grade.grade is None:
+            continue
+        grade = grade.grade
+        arranges.append((arrange, grade, grade_to_GPA(grade)))
+        credit_sum += arrange.course.credit
+        credit_point_sum += arrange.course.credit * grade_to_GPA(grade)
+        if grade < 60:
+            unpass_credit_sum += arrange.course.credit
+    gpa = credit_point_sum / credit_sum
+    return render_template(
+        'student/query_grade.html',
+        arranges=arranges,
+        credit_sum=credit_sum,
+        credit_point_sum=credit_point_sum,
+        unpass_credit_sum=unpass_credit_sum,
+        gpa=gpa
+    )
+
+
 
 

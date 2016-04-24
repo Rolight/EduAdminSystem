@@ -50,4 +50,8 @@ def create_app(config_name):
     from app.views.student import student as student_blueprint
     app.register_blueprint(student_blueprint, url_prefix='/student')
 
+    # 教师用户相关
+    from app.views.teacher import teacher as teacher_blueprint
+    app.register_blueprint(teacher_blueprint, url_prefix='/teacher')
+
     return app

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 教务管理系统 - 教学班成绩查询 {% endblock %}
+
+{% block page_content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1>教学班成绩查询</h1>
+        </div>
+    </div>
+    <div class="row">
+        <h4>当前课程：{{ course_name }}</h4>
+    </div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>院系</th>
+                    <th>专业</th>
+                    <th>班级</th>
+                    <th>成绩</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <th scope="row">{{ student[0] }}</th>
+                    <td>{{ student[1].name }}</td>
+                    <td>{{ student[1].sex }}</td>
+                    <td>{{ student[1].department.name }}</td>
+                    <td>{{ student[1].major.name }}</td>
+                    <td>{{ student[1].rclass.name }}</td>
+                    <td>{{ student[2] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

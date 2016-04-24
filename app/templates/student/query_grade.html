@@ -1,10 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-</body>
-</html>
+{% block title %} 教务管理系统 - 成绩查询 {% endblock %}
+
+{% block page_content %}
+<h5 class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <h1>成绩查询</h1>
+        </div>
+    </div>
+    <div class="row">
+        <span class="label label-primary">总学分：{{ credit_sum }}</span>
+        <span class="label label-primary">学分绩点总和：{{ credit_point_sum }}</span>
+        <span class="label label-primary">未通过学分：{{ unpass_credit_sum }}</span>
+        <span class="label label-primary">平均学分绩点：{{ gpa }}</span>
+    </div>
+    <div class="row">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>学年学期</th>
+                    <th>课程代码</th>
+                    <th>课程名称</th>
+                    <th>课程性质</th>
+                    <th>学分</th>
+                    <th>开课学院</th>
+                    <th>成绩</th>
+                    <th>绩点</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for arrange in arranges %}
+                <tr>
+                    <th scope="row">{{ arrange[0].year }}学年第{{ arrange[0].semaster }}学期</th>
+                    <td>{{ arrange[0].course.code }}</td>
+                    <td>{{ arrange[0].course.name }}</td>
+                    <td>{{ arrange[0].course.nature }}</td>
+                    <td>{{ arrange[0].course.credit }}</td>
+                    <td>{{ arrange[0].department.name }}</td>
+                    <td>{{ arrange[1] }}</td>
+                    <td>{{ arrange[2] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
