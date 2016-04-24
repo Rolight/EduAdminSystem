@@ -1,20 +1,36 @@
-alembic==0.8.5
-blinker==1.4
-dominate==2.1.17
-Flask==0.10.1
-Flask-Bootstrap==3.3.5.7
-Flask-Email==1.4.4
-Flask-Migrate==1.8.0
-Flask-Moment==0.5.1
-Flask-Script==2.0.5
-Flask-SQLAlchemy==2.1
-Flask-WTF==0.12
-itsdangerous==0.24
-Jinja2==2.8
-Mako==1.0.4
-MarkupSafe==0.23
-python-editor==0.5
-SQLAlchemy==1.0.12
-visitor==0.1.2
-Werkzeug==0.11.4
-WTForms==2.1
+alembic (0.8.5)
+blinker (1.4)
+decorator (4.0.9)
+dominate (2.1.17)
+Flask (0.10.1)
+Flask-Bootstrap (3.3.5.7)
+Flask-Email (1.4.4)
+Flask-Login (0.3.2)
+Flask-Mail (0.9.1)
+Flask-Migrate (1.8.0)
+Flask-Moment (0.5.1)
+Flask-Script (2.0.5)
+Flask-SQLAlchemy (2.1)
+Flask-WTF (0.12)
+ForgeryPy (0.1)
+infinity (1.4)
+intervals (0.7.1)
+itsdangerous (0.24)
+Jinja2 (2.8)
+Mako (1.0.4)
+MarkupSafe (0.23)
+MySQL-python (1.2.5)
+pip (8.1.1)
+python-editor (0.5)
+setuptools (20.3)
+six (1.10.0)
+SQLAlchemy (1.0.12)
+SQLAlchemy-Utils (0.32.1)
+validators (0.10)
+visitor (0.1.2)
+Werkzeug (0.11.4)
+wheel (0.29.0)
+WTForms (2.1)
+WTForms-Alchemy (0.15.0)
+WTForms-Components (0.10.0)
+xlrd (0.9.4)

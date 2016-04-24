@@ -42,7 +42,7 @@ class StudentUserInformationForm(RegistrationForm):
     public = StringField(u'政治面貌: ')
     # todo:身份证号可以加上正则表达式来判断是否合法
     idcard = StringField(u'身份证号: ')
-    birthday = DateTimeField(u'出生年月: ', format='%Y-%m')
+    birthday = DateTimeField(u'出生年月(e.1995-07): ', format='%Y-%m')
     in_time = IntegerField(u'入学年份: ', validators=[DataRequired(), NumberRange(min=2000, max=2100, message=u'请输入大于2000并且小于2100的数字')])
     degree = SelectField(u'学位: ', validators=[DataRequired()])
     department = SelectField(u'院系*: ', validators=[DataRequired()], coerce=int)
@@ -83,7 +83,7 @@ class TeacherUserInformationForm(RegistrationForm):
     public = StringField(u'政治面貌: ')
     # todo:身份证号可以加上正则表达式来判断是否合法
     idcard = StringField(u'身份证号: ')
-    birthday = DateTimeField(u'出生年月: ', format='%Y-%m')
+    birthday = DateTimeField(u'出生年月(e.1995-07): ', format='%Y-%m')
     in_time = IntegerField(u'入职年份: ', validators=[DataRequired(), NumberRange(min=1900, max=2100, message=u'请输入大于等于1900并且小于2100的数字')])
     degree = SelectField(u'职称*: ', validators=[DataRequired()])
     department = SelectField(u'院系*: ', validators=[DataRequired()], coerce=int)

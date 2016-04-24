@@ -147,7 +147,7 @@ def edit_course(id):
     form.nature.data = course.nature
     form.credit.data = course.credit
     form.description = course.description
-    return render_template('department/edit_course.html')
+    return render_template('department/edit_course.html', form=form)
 
 # 删除课程
 @department.route('course/del/<int:id>', methods=['GET', 'POST'])
