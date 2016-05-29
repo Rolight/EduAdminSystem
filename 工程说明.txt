@@ -1,0 +1,16 @@
+此工程可以在校园网内通过访问地址http://172.19.141.24预览
+部署系统：Ubuntu
+运行环境：virualenv
+容器：supervisor
+数据库：SQLite
+服务器软件：Nginx
+预设账号：
+超级管理员管理员账号admin，密码loulinhui
+计算机科学与技术学院账号cs，密码cs
+
+
+项目书写进度可以在此项目的github页面上查看
+页面地址：https://github.com/Rolight/EduAdminSystem/commits/master
+
+config.py为配置文件，里面可以修改数据库参数
+requirements.txt 为项目依赖的所有包，可以直接通过pip安装

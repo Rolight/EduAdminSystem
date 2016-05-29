@@ -26,7 +26,7 @@ def add_department():
         db.session.add(department)
         db.session.commit()
         flash(u'添加成功')
-        return redirect(request.args.get('next') or url_for('main.index'))
+        return redirect(url_for('admin.add_department'))
     return render_template(
         'admin/add_department.html',
         form=form,
@@ -60,7 +60,7 @@ def add_class():
         db.session.add(rclass)
         db.session.commit()
         flash(u'添加成功')
-        return redirect(request.args.get('next') or url_for('main.index'))
+        return redirect(url_for('admin.add_class'))
     return render_template(
         'admin/add_class.html',
         form=form,
@@ -90,7 +90,7 @@ def add_major():
         db.session.add(major)
         db.session.commit()
         flash(u'添加成功')
-        return redirect(request.args.get('next') or url_for('main.index'))
+        return redirect(url_for(admin.add_major))
     return render_template(
         'admin/add_major.html',
         form=form,

@@ -166,7 +166,7 @@ class StudentUser(User):
             sc = selectCourse
             delt = sc.delete(sc.c.arrange_id == arrange_id and sc.c.student_id == self.id)
             db.session.execute(delt)
-            g1 = Grades.query.filter_by(student_id=self.id).first()
+            g1 = Grades.query.filter_by(student_id=self.id, arrange_id=arrange_id).first()
             if g1 is not None:
                 db.session.delete(g1)
             db.session.commit()

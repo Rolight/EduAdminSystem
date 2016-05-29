@@ -23,7 +23,7 @@ def login():
     return render_template('auth/login.html', form=form)
 
 # 登出
-@auth.route('/logout')
+@auth.route('/logout', methods=['GET'])
 @login_required
 def logout():
     logout_user()
@@ -35,7 +35,6 @@ def logout():
 def register_student():
     form = StudentUserInformationForm()
     form.set_chioces()
-
     if form.validate_on_submit():
         stu = StudentUser(
             role=Role.query.filter_by(name=u'Student').first(),

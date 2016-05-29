@@ -115,7 +115,10 @@ def query_grade_semaster():
             credit_point_sum += arrange.course.credit * grade_to_GPA(grade)
             if grade < 60:
                 unpass_credit_sum += arrange.course.credit
-    gpa = credit_point_sum / credit_sum
+    if credit_sum == 0:
+        gpa = 0
+    else:
+        gpa = credit_point_sum / credit_sum
     return render_template(
         'student/query_grade.html',
         arranges=arranges,
@@ -151,7 +154,10 @@ def query_grade_year():
             credit_point_sum += arrange.course.credit * grade_to_GPA(grade)
             if grade < 60:
                 unpass_credit_sum += arrange.course.credit
-    gpa = credit_point_sum / credit_sum
+    if credit_sum == 0:
+        gpa = 0
+    else:
+        gpa = credit_point_sum / credit_sum
     return render_template(
         'student/query_grade.html',
         arranges=arranges,
@@ -185,7 +191,11 @@ def query_grade_all():
         credit_point_sum += arrange.course.credit * grade_to_GPA(grade)
         if grade < 60:
             unpass_credit_sum += arrange.course.credit
-    gpa = credit_point_sum / credit_sum
+
+    if credit_sum == 0:
+        gpa = 0
+    else:
+        gpa = credit_point_sum / credit_sum
     return render_template(
         'student/query_grade.html',
         arranges=arranges,

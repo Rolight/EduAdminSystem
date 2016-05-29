@@ -27,6 +27,7 @@ class TimeSpan(db.Model):
                     id=count,
                     name=u'周%s 第%d节' % (day, r)
                 )
+                count += 1
                 db.session.add(timespan)
                 db.session.commit()
 
