@@ -37,7 +37,7 @@ class Config:
         pass
 
 class DevelopmentConfig(Config):
-    DEBUG = True
+    DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
     #SQLALCHEMY_DATABASE_URI = 'mysql://root:loulinhui@localhost/eduAdminDev' + '?charset=utf8'
 
