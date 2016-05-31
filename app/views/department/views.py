@@ -28,7 +28,7 @@ def post():
             body=form.body.data,
             author_id=current_user.id,
             title=form.title.data,
-            post_time=str(datetime.utcnow())
+            post_time=datetime.utcnow()
         )
         db.session.add(post)
         db.session.commit()
@@ -76,7 +76,7 @@ def edit_post(id):
     if form.validate_on_submit():
         post.body = form.body.data
         post.title = form.title.data
-        post.post_time = str(datetime.utcnow())
+        post.post_time = datetime.utcnow()
         db.session.add(post)
         db.session.commit()
         flash(u'公告已经成功更改')
